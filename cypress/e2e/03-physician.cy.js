@@ -70,31 +70,122 @@ describe('Physician Consultation Workflow', () => {
       cy.wait(2000)
 
       // PATIENT COMPLAINTS
-      cy.get('body').then(($body) => {
-        if ($body.text().includes('Fever') && $body.text().includes('Headache')) {
-          cy.log('Patient complaints already captured')
-        } else {
-          cy.contains('Patient Complaints')
-            .parents('.card-header, .p-card, div')
-            .first()
-            .find('button')
-            .click({ force: true })
+  // ===========================
+// PATIENT COMPLAINTS
+// ===========================
 
-          cy.contains('Add Patient Complaints', { timeout: 20000 }).should('be.visible')
+cy.contains('Patient Complaints')
+  .parents('.card-header, .p-card, div')
+  .first()
+  .find('button')
+  .click({ force: true })
 
-          cy.contains('tr', 'Fever')
-            .find('input[type="checkbox"]')
-            .check({ force: true })
+cy.contains('Add Patient Complaints', { timeout: 20000 })
+  .should('be.visible')
 
-          cy.contains('tr', 'Headache')
-            .find('input[type="checkbox"]')
-            .check({ force: true })
+cy.wait(1000)
 
-          cy.contains('button', 'Save & Exit').click({ force: true })
-        }
-      })
+cy.get('body').then(($body) => {
 
-      cy.wait(3000)
+  // Check only right side selected complaints area
+  const selectedComplaintsText = $body
+    .find('*')
+    .filter((i, el) =>
+      el.innerText &&
+      el.innerText.includes('Patient Complaints') &&
+      !el.innerText.includes('Search Complaints') &&
+      !el.innerText.includes('My Top')
+    )
+    .last()
+    .text()
+
+  const feverAlreadyAdded = selectedComplaintsText.includes('Fever')
+  const headacheAlreadyAdded = selectedComplaintsText.includes('Headache')
+
+  if (feverAlreadyAdded && headacheAlreadyAdded) {
+    cy.log('Fever and Headache already captured')
+
+    cy.contains('button', 'Close')
+      .click({ force: true })
+
+  } else {
+
+    cy.log('Adding Fever and Headache')
+
+    if (!feverAlreadyAdded) {
+      cy.contains('tr', 'Fever')
+        .find('.p-checkbox-box, input[type="checkbox"]')
+        .first()
+        .click({ force: true })
+    }
+
+    if (!headacheAlreadyAdded) {
+      cy.contains('tr', 'Headache')
+        .find('.p-checkbox-box, input[type="checkbox"]')
+        .first()
+        .click({ force: true })
+    }
+
+    cy.wait(1000)
+
+    cy.contains('button', 'Save & Exit')
+      .click({ force: true })
+  }
+})
+
+cy.wait(3000)
+
+
+
+// ===========================
+// HPI
+// ===========================
+
+cy.contains('HPI')
+  .parents('.card-header, .p-card, div')
+  .first()
+  .find('button')
+  .click({ force: true })
+
+cy.contains('Add HPI', { timeout: 20000 })
+  .should('be.visible')
+
+cy.wait(2000)
+
+cy.get('body').then(($body) => {
+
+  const hpiAlreadyExists =
+    $body.text().includes('Update & Exit') ||
+    $body.text().includes('Patient presented with complaints of fever')
+
+  if (hpiAlreadyExists) {
+
+    cy.log('HPI already exists')
+
+    cy.contains('button', 'Close')
+      .click({ force: true })
+
+  } else {
+
+    cy.log('Creating new HPI')
+
+    cy.get('.ql-editor')
+      .first()
+      .click({ force: true })
+      .clear({ force: true })
+      .type(
+        'Patient presented with complaints of fever for the past 3 days, associated with severe headache since yesterday. Fever is intermittent, moderate in intensity, and partially relieved with over-the-counter medications. No history of recent travel, sick contacts, cough, breathlessness, chest pain, abdominal pain, vomiting, loss of consciousness, or urinary complaints. Appetite is mildly reduced and sleep is disturbed due to fever. Patient is hemodynamically stable at presentation.',
+        { force: true }
+      )
+
+    cy.contains('button', 'Save & Exit')
+      .click({ force: true })
+  }
+})
+
+cy.wait(3000)
+
+
 
       // VITALS
       cy.get('body').then(($body) => {
