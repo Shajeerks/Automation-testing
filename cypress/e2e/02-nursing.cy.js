@@ -154,7 +154,7 @@ cy.get('body').then(($body) => {
       .first()
       .click({ force: true })
       .type(
-        'Patient came for outpatient consultation. No major complaints reported. General condition stable.',
+        'Patient presented with complaints of fever for the past 3 days, associated with severe headache since yesterday. Fever is intermittent, moderate in intensity, and partially relieved with over-the-counter medications. Headache is generalized, continuous, and not associated with visual disturbances, vomiting, or loss of consciousness. No history of recent travel, sick contacts, cough, breathlessness, chest pain, abdominal pain, or urinary complaints. Appetite is mildly reduced, and sleep has been disturbed due to fever. Patient is hemodynamically stable at presentation.',
         { force: true }
       )
 
