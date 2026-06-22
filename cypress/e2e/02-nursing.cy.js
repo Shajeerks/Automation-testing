@@ -189,11 +189,20 @@ cy.get('input[placeholder*="Enter Res"]')
 cy.get('input[placeholder*="Enter SPO2"]')
   .type('98', { force: true })
 
-// BP fields
-cy.get('input:visible').then(($inputs) => {
-  cy.wrap($inputs.eq(6)).type('120', { force: true })
-  cy.wrap($inputs.eq(7)).type('80', { force: true })
-})
+// BP - enter 120 / 80 by locating Blood Pressure label
+cy.contains('Blood Pressure')
+  .parent()
+  .within(() => {
+    cy.get('input:visible')
+      .eq(0)
+      .clear({ force: true })
+      .type('120', { force: true })
+
+    cy.get('input:visible')
+      .eq(1)
+      .clear({ force: true })
+      .type('80', { force: true })
+  })
 
 cy.contains('button', 'Save & Exit')
   .click({ force: true })

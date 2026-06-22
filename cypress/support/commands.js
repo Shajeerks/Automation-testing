@@ -23,6 +23,9 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+
+
 Cypress.Commands.add('loginToHIS', () => {
   cy.visit('https://v2qa.lifetrenz.com/#/auth/login')
 
@@ -32,3 +35,16 @@ Cypress.Commands.add('loginToHIS', () => {
 
   cy.wait(5000)
 })
+
+
+
+
+// Cypress.Commands.add('loginToHIS', () => {
+//   cy.visit('https://rmh-sit.corazonkare.com/#/auth/login')
+
+//   cy.get('input').eq(0).type('shajeer.m')
+//   cy.get('input[type="password"]').type('shajeer@1')
+//   cy.contains('button', 'LOGIN').click()
+
+//   cy.wait(5000)
+// })

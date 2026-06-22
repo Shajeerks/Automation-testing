@@ -25,7 +25,7 @@ describe('Patient Registration and Appointment Workflow', () => {
     cy.get('input:visible').eq(1).type(patient.middleName)
     cy.get('input:visible').eq(2).type(patient.lastName)
     cy.get('input:visible').eq(4).clear().type(patient.dob)
-    cy.get('input:visible').eq(5).clear().type(patient.mobile)
+    cy.get('input:visible').eq(5).clear().type(patient.mobile) 
     cy.get('input:visible').eq(7).clear().type(patient.email)
 
     cy.contains('Select').first().click()
@@ -40,8 +40,8 @@ describe('Patient Registration and Appointment Workflow', () => {
       .invoke('text')
       .then((text) => {
 
-        const match = text.match(/DWH\d+/)
-        mpiNumber = match ? match[0] : ''
+        const match = text.match(/MPI:\s*([A-Z0-9]+)/i)
+mpiNumber = match ? match[1].trim() : ''
 
         cy.log('Captured MPI: ' + mpiNumber)
         expect(mpiNumber).to.not.equal('')

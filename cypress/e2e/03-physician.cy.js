@@ -1,5 +1,9 @@
 describe('Physician Consultation Workflow', () => {
 
+    beforeEach(() => {
+    cy.viewport(1920, 1080)
+  })
+
   it('Login as doctor and start consultation for same patient', () => {
 
     cy.fixture('patient.json').then((patient) => {
